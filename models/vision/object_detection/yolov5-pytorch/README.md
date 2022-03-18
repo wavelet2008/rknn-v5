@@ -14,6 +14,7 @@
 git clone https://github.com/ultralytics/yolov5.git
 cd yolov5
 git checkout c9a46a60e09ab94009754ca71bde23e91aab33fe
+（git switch -c  c9a46a60e09ab94009754ca71bde23e91aab33fe 修改成）
 git apply ../patchs/rknpu_optimize.patch
 
 #对于rknpu设备，我们推荐打上下面的patch，将silu激活层替换成relu，以获得更佳的推理性能。请注意替换后权重需要重新训练！
@@ -38,15 +39,51 @@ git apply ../patchs/silu_to_relu.patch
 - 通常而言，Detect层的stride信息固定为[8,16,32]，如果该定义被修改了，也需要在demo中修改对应信息。
 
 
-
+训练模型：
+python train.py --data coco128.yaml --cfg yolov5s.yaml     --img 320     --batch-size 16  
+修改  yaml 中anchors
 ---
+test:
+python detect.py  --source data/images/bus.jpg   --weights  runs/train/exp2/weights/best.pt  --conf 0.25
+
+ 
+python   export.py    --weights   runs/train/exp2/weights/best.pt --img 320 --batch 1
+python -m onnxsim  runs/train/exp2/weights/best.onnx yolov5s-sim.onnx  
+方法1
+直接转---》rknn-toolkit-v1.7.1/examples/onnx/yolov5   
+修改load_onnx   --》outputs
+good
+
+方法2：
+
+RKNN_model_convert 转
+
+yolov5s_convert.yml  修改 各种参数RK_device_id: simulator 
+
+
+得到model.rknn 
+
+测试模型：
+RKNN_python_demo 
+
+修改 model = RKNN_model_container(args.model_path, None, "")
+
+    input_data.append(np.transpose(input0_data, (1, 2, 0, 3)))
+    input_data.append(np.transpose(input1_data, (1, 2, 0, 3)))
+    input_data.append(np.transpose(input2_data, (1, 2, 0, 3)))
+ demo :onnx/yolov5$ vim  3test.py 
+
+python  yolo_map_test_rknn.py  --model_path ../RKNN_model_convert/model.rknn  --img_show --img_folder ../test_data
 
 ### 导出模型及转换模型：
 
 ​	在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
+ 
+
 
 ```python
-python export.py --rknpu {device_platform}
+python export.py --rknpu {device_platform}  修改 rknn.load_onnx  加上各种lable
+
 ```
 
 - device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
