@@ -40,7 +40,9 @@ git apply ../patchs/silu_to_relu.patch
 
 
 训练模型：
+
 python train.py --data coco128.yaml --cfg yolov5s.yaml     --img 320     --batch-size 16  
+
 修改  yaml 中anchors
 ---
 test:
@@ -144,4 +146,31 @@ RKNN_toolkit2 TO DO
 | rk3588 - u8(triple core) |              |              |              |              |
 
 具体细节请参考[文档](./RKNN_model_convert/README.md)
+
+
+
+yolov5转换成rknn模型卡住问题
+https://blog.csdn.net/u013171226/article/details/120886871
+1.安装驱动usb 
+2.[root@tech:/etc/init.d]# cat  .usb_config 
+usb_ntb_en
+usb_adb_en
+3.zadig-2.4.exe   rk3xx 安装驱动重启 
+
+4. python -m rknn.bin.list_devices
+all device(s) with ntb mode:
+27049522c092de70
+5.
+C:\Users\ffipc\AppData\Local\Programs\Python\Python36>python ecompile_model.py   mobilenet_v2.rknn vvmobilenet_v2.rknn
+ret = rknn.init_runtime(target='rk1126', rknn2precompile=True)
+--> Init runtime environment
+D RKNNAPI: ==============================================
+D RKNNAPI: RKNN VERSION:
+D RKNNAPI:   API: 1.7.1 (566a9b6 build: 2021-10-28 15:13:57)
+D RKNNAPI:   DRV: 1.6.1 (f78b668 build: 2021-04-25 15:46:12)
+D RKNNAPI: ==============================================
+done
+
+
+
 
