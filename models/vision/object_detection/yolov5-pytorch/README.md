@@ -150,16 +150,22 @@ RKNN_toolkit2 TO DO
 
 
 yolov5转换成rknn模型卡住问题
+
 https://blog.csdn.net/u013171226/article/details/120886871
+
 1.安装驱动usb 
+
 2.[root@tech:/etc/init.d]# cat  .usb_config 
+
 usb_ntb_en
 usb_adb_en
+
 3.zadig-2.4.exe   rk3xx 安装驱动重启 
 
 4. python -m rknn.bin.list_devices
 all device(s) with ntb mode:
 27049522c092de70
+
 5.
 C:\Users\ffipc\AppData\Local\Programs\Python\Python36>python ecompile_model.py   mobilenet_v2.rknn vvmobilenet_v2.rknn
 ret = rknn.init_runtime(target='rk1126', rknn2precompile=True)
