@@ -51,6 +51,11 @@ python detect.py  --source data/images/bus.jpg   --weights  runs/train/exp2/weig
  
 python   export.py    --weights   runs/train/exp2/weights/best.pt --img 320 --batch 1
 python -m onnxsim  runs/train/exp2/weights/best.onnx yolov5s-sim.onnx  
+
+可以导出部分模型 ：这样比较好
+remonnx.py
+onnx.utils.extract_model(input_path, output_path, input_names, output_names)
+
 方法1
 直接转---》rknn-toolkit-v1.7.1/examples/onnx/yolov5   
 修改load_onnx   --》outputs
