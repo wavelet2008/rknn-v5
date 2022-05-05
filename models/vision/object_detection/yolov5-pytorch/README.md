@@ -38,7 +38,9 @@ git apply ../patchs/silu_to_relu.patch
 - 对于不同的数据集，yolov5仓库可能会自动求出最佳anchors，导出模型时请留意anchors信息，与后续demo的anchors信息不一致时，需要修改demo中的anchors信息。
 - 通常而言，Detect层的stride信息固定为[8,16,32]，如果该定义被修改了，也需要在demo中修改对应信息。
 
+131:
 
+/home/pc/xx/rkn/rknn_model_zoo/models/vision/object_detection/yolov5-pytorch/yolov5
 训练模型：
 
 python train.py --data coco128.yaml --cfg yolov5s.yaml     --img 320     --batch-size 16  
